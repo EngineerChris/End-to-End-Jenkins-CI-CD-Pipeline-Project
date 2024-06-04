@@ -21,6 +21,9 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
 - [Splunk](https://www.splunk.com/) Splunk is an innovative technology which searches and indexes application/system log files and helps organizations derive insights from the data.
 
 # Jenkins Complete CI/CD Pipeline Project Runbook
+  - Tool Installation User Data: https://github.com/EngineerChris/DevOps-Tools-Installation-Configuration/tree/main
+  - Total of 9 ec2 instances are required
+
 1) Create a GitHub Repository with the name `Jenkins-Realworld-CICD-Project` and push the code in this branch(main) to 
     your remote repository (your newly created repository). 
     - Go to GitHub: https://github.com
@@ -58,7 +61,8 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - AMI: `Amazon Linux 2`
     - Instance type: `t2.medium`
     - Key pair: `Select` or `create a new keypair`
-    - Security Group (Edit/Open): `8080, 9100` and `22 to 0.0.0.0/0`
+    - Security Group (Edit/Open) "Rename "Jenkins/Maven/Ansible-SG": `8080 (jenkins), 9100(Node Exporter)` and `22 to 0.0.0.0/0` 
+      - 
     - IAM instance profile: Select the `AWS-EC2FullAccess-Role`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/maven-nexus-sonarqube-jenkins-install/jenkins-install.sh
     - Launch Instance
@@ -69,7 +73,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - AMI: `Ubuntu 22.04`
     - Instance type: `t2.medium`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `9000, 9100` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Sonarqube-SG): `9000, 9100` and `22 to 0.0.0.0/0`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/maven-nexus-sonarqube-jenkins-install/sonarqube-install.sh
     - Launch Instance
 
@@ -79,7 +83,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - AMI: `Amazon Linux 2`
     - Instance type: `t2.medium`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `8081, 9100` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Nexus-SG): `8081, 9100` and `22 to 0.0.0.0/0`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/maven-nexus-sonarqube-jenkins-install/nexus-install.sh
     - Launch Instance
 
@@ -92,7 +96,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - Number: `1`
     - Instance type: `t2.micro`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `8080, 9100, 9997` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Dev-Stage-Prod-SG): `8080 (Tomcat), 9100 (Node Exporter), 9997 (Splunk Forwarder)` and `22 to 0.0.0.0/0`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/tomcat-splunk-installation/tomcat-ssh-configure.sh
     - Launch Instance
 
@@ -105,7 +109,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - Number: `1`
     - Instance type: `t2.micro`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `8080, 9100, 9997` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Choose:Dev-Stage-Prod-SG): `8080, 9100, 9997` and `22 to 0.0.0.0/0`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/tomcat-splunk-installation/tomcat-ssh-configure.sh
     - Launch Instance
 
@@ -118,7 +122,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - Number: `1`
     - Instance type: `t2.micro`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `8080, 9100, 9997` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Choose:Dev-Stage-Prod-SG): `8080, 9100, 9997` and `22 to 0.0.0.0/0`
     - User data (Copy the following user data): https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/tomcat-splunk-installation/tomcat-ssh-configure.sh
     - Launch Instance
 
@@ -138,7 +142,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - AMI: `Ubuntu 22.04`
     - Instance type: `t2.micro`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `3000` and `22 to 0.0.0.0/0`
+    - Security Group (Eit/Open) (Grafana-SG): `3000` and `22 to 0.0.0.0/0`
     - Launch Instance
 
 11) EC2 (Splunk)
@@ -147,7 +151,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
     - AMI: `Amazon Linux 2`
     - Instance type: `t2.large`
     - Key pair: `Select a keypair`
-    - Security Group (Eit/Open): `22, 8000, 9997, 9100` to `0.0.0.0/0`
+    - Security Group (Eit/Open): `22, 8000 (ui), 9997(Forwarder), 9100` to `0.0.0.0/0`
     - Launch Instance
 
 #### NOTE: Confirm and make sure you have a total of 9 VM instances
@@ -183,7 +187,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
 ## Configure All Systems
 ### Configure Promitheus With (Service Discovery)
   - Login/SSH to your Prometheus Server
-  - Clone repository: `git clone https://github.com/awanmbandi/realworld-cicd-pipeline-project.git`
+  - Clone repository: `git clone https://github.com/EngineerChris/DevOps-Tools-Install/tree/main/prometheus-and-grafana-install OR  https://github.com/EngineerChris/Jenkins-Realworld-CICD-Project`
   - Change directory: `cd realworld-cicd-pipeline-project`
   - Swtitch branch: `git switch prometheus-and-grafana-install`
   - Confirm Branch Switch: `git branch` and `ls -al`
@@ -194,7 +198,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
 
 ### Configure Grafana
   - Login/SSH to your Grafana Server
-  - Clone repository: `git clone https://github.com/awanmbandi/realworld-cicd-pipeline-project.git`
+  - Clone repository: `git clone https://github.com/EngineerChris/DevOps-Tools-Install/tree/main/prometheus-and-grafana-install OR hhttps://github.com/EngineerChris/Jenkins-Realworld-CICD-Project`
   - Change directory: `cd realworld-cicd-pipeline-project`
   - Swtitch branch: `git switch prometheus-and-grafana-install`
   - Confirm Branch Switch: `git branch` and `ls -al`
@@ -206,7 +210,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
   - Login/SSH into the "Dev-Env", "Stage-Env" and "Prod-Env" VM instance
   - Perform the following operations on all of them
   - Install git by running: `sudo yum install git -y `
-  - Clone repository: `git clone https://github.com/awanmbandi/realworld-cicd-pipeline-project.git`
+  - Clone repository: `git clone https://github.com/EngineerChris/DevOps-Tools-Install/tree/main/prometheus-and-grafana-install OR https://github.com/EngineerChris/Jenkins-Realworld-CICD-Project`
   - Change directory: `cd realworld-cicd-pipeline-project`
   - Swtitch branch: `git switch prometheus-and-grafana-install`
   - Confirm Branch Switch: `git branch` and `ls -al` *(to confirm you have the branch files)*
@@ -269,7 +273,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
       - Click on `Import`
       - Click on `Upload JSON file` and Select the `Dashboard JASON` file you just downloaded
   ![GrafanaMetrics!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/zdocs/images/fwefwrfwrsgvsd.png)
-      - Scrol down to `"Prometheus"` and select the `"Prometheus Data Source"` you defined ealier which is `Prometheus`
+      - Scroll down to `"Prometheus"` and select the `"Prometheus Data Source"` you defined ealier which is `Prometheus`
       - CLICK on `"Import"`
   - Refresh your Grafana Dashbaord 
       - Click on the `"Drop Down"` for `"Host"` and select any of the `"Instances(IP)"`
@@ -279,7 +283,7 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
 #### A) SSH into your `Splunk Server` including `Dev`, `Stage` and `Prod` Instances
 - **NOTE:** Run The Following Commands On The `Splunk Server/Indexer Only`
     - Download the Splunk RPM installer package for Linux
-    - Link: 
+    - Link: https://www.splunk.com/
     ```bash
     wget -O splunk-9.1.1-64e843ea36b1.x86_64.rpm "https://download.splunk.com/products/splunk/releases/9.1.1/linux/splunk-9.1.1-64e843ea36b1.x86_64.rpm"
     ```
@@ -320,13 +324,17 @@ The CI/CD Pipeline Project integrates tools like Git, GitHub, Jenkins, Maven, Ch
 ![SplunkSetup4!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/zdocs/images/fwefwrfwrsgvsdsd.png) 
 
 #### Step 2: Install The Splunk Forwarder only on the `Dev, Stage and Prod` Servers
-- **NOTE:** Execute every command mentioned bellow across all application servers in all the enviroments
-- **NOTE:** Do Not install the Splunk Server in these resources/environments
+- **NOTE:** 
+  - Splunk Forwarder are installed into servers/env where the logs are coming from which is usually the application/web Servers.
+  - Logs will then be forwarded from here to the Indexer.
+  - Execute every command mentioned bellow across all application servers in all the enviroments
+  - **DO NOT** install the Splunk Server / indexer in these resources/environments.
+**STEPS**
 - **SSH** Into your instances, as normal user `ec2-user` or ubuntu or centos etc
-
 - Download the Splunk forwarder RPM installer package 
 ```bash
 wget -O splunkforwarder-9.1.1-64e843ea36b1.x86_64.rpm "https://download.splunk.com/products/universalforwarder/releases/9.1.1/linux/splunkforwarder-9.1.1-64e843ea36b1.x86_64.rpm"
+
 ```
 - Install the Forwarder
 ```bash
@@ -334,33 +342,38 @@ ls -al
 sudo yum install ./splunkforwarder-9.1.1-64e843ea36b1.x86_64.rpm -y
 ```
 
-- Change to the `splunkforwarder bin` directory and start the forwarder
-- NOTE: `The Password` must be at least `8` characters long.
+- Change to the `splunkforwarder bin` directory and start the forwarder. 
+- NOTE: `The Password` must be at least `8` characters long. Example Username `adminforward` and password `adminforward`
 - Set the port for the forwarder to ``9997``, this is to keep splunk server from conflicting with the splunk forwarder
 ```bash
 sudo bash
 cd /opt/splunkforwarder/bin
 ./splunk start --accept-license --answer-yes
+
 ```
 
-- Set the forwarder to forward to the splunk server on port ``9997``, and will need to enter username and password (change IP address with your own server IP address). When prompted for username and password, enter what you set above for username and password.
+- Set the forwarder to forward logs to the splunk server / indexer on port ``9997``, and will need to enter username and password (change IP address with your own server IP address). When prompted for username and password, enter what you set above for username and password i.e the INDEXER username and password. Ensure to copy PUBLIC-IP of the Plunk-Server as the communication opens over the internet, so the private IP will not work.
+ -**Note**: We will be prompted for username and passord, this will the username of Password of the `Splunk Inderver / Server`. This is to allowes the Forwarder to authenticate into Splunk Indexer / Server.
+
 ```
-./splunk add forward-server SPLUNK-SERVER-Public-IP-Address:9997
+./splunk add forward-server <SPLUNK-SERVER-Public-IP-Address>:9997
 ```
 
-- Restart Splunk on the VM you are configuring the Forwarder
+- Restart Splunk on the VM you are configuring the Forwarder (i.e Dev, Stage, and Prod app servers)
 ```
 ./splunk restart
 ```
 
-- Set the forwarder to monitor the ``/var/log/tomcat/`` directory and restart
+- Set the forwarder to monitor the ``/var/log/tomcat/`` directory and restart. Since we are using TomCat as .., and Tomcat logs are stored in ``/var/log/tomcat/`` directory.
 ```
 ./splunk add monitor /var/log/tomcat/
 ```
+Next: Repeat for `Stage` and `Prod`
 
-### 2. Navigate Back to Your `Splunk Indexer/Server` 
-- Set the port for the Splunk Indexer or Server to listen on 9997 and restart
+### 2. Navigate Back to `Splunk Indexer/Server` to Set the port for the Splunk Indexer or Server to listen on 9997 and restart
+- Set the port for the Splunk Indexer or Server to listen on 9997 and restart. Port 9997 is the forwarding port on the indexer.
 ```bash
+pwd #ensure you are in /opt/splunk/bin, ELSE
 cd /opt/splunk/bin
 ./splunk enable listen 9997
 ```
@@ -371,7 +384,7 @@ cd /opt/splunk/bin
 
 #### Step 3: View Application Logs in Splunk
 - Login to your `Splunk Server` at http://Splunk-Server-IP:8000
-- Click on `Search and Reporting` -->> `Data Summary` -->> Select any of the displayed `Environments Host` to visualize `App Logs`
+- Click on `Search and Reporting` (on the left) -->> `Data Summary` -->> Select any of the displayed `Environments Host` to visualize `App Logs`
 ![SplunkSetup4!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/raw/zdocs/images/Screen%20Shot%202023-04-29%20at%2011.39.03%20PM.png)
 
 - Application Log Indexed
@@ -406,6 +419,8 @@ cd /opt/splunk/bin
         - **Slack Notification**
         - **Nexus Artifact Uploader**
         - **Build Timestamp (Needed for Artifact versioning)**
+        - **Pipeline Stage View**
+        - **Blue Ocean**
     - Click on `Install`
     - Once all plugins are installed
     - Select/Check the Box **Restart Jenkins when installation is complete and no jobs are running**
@@ -420,13 +435,13 @@ cd /opt/splunk/bin
     - **JDK** 
         - Click on `Add JDK` -->> Make sure **Install automatically** is enabled 
         
-        **Note:** By default the **Install Oracle Java SE Development Kit from the website** make sure to close that option by clicking on the image as shown below.
+        **Note:** By default the **Install Oracle Java SE Development Kit from the website** make sure to close(remove) that option by clicking on the image as shown below.
 
         ![JDKSetup!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/blob/zdocs/images/dsdsdsdsdsd.png)
 
         * Click on `Add installer`
         * Select `Extract *.zip/*.tar.gz` 
-        * Name: **`localJdk`**
+        * Name: **`localJdk`**  # Same as written on Jenkinsfile line 20
         * Download URL for binary archive: **https://download.java.net/java/GA/jdk11/13/GPL/openjdk-11.0.1_linux-x64_bin.tar.gz**
         * Subdirectory of extracted archive: **`jdk-11.0.1`**
     - **Git** 
@@ -436,7 +451,9 @@ cd /opt/splunk/bin
     
     - **SonarQube Scanner** 
       - Click on `Add SonarQube Scanner` 
+      - Name `SonarQube`  #must be written as is on the Jenkinsfile line 56
       - Enable: `Install automatically` (Optional)
+      - Version: Leave the populated default version as is - no chnage
       ![SonarQubeScanner!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/raw/zdocs/images/Screen%20Shot%202023-04-24%20at%209.35.20%20AM.png)
 
     - **Maven** 
@@ -473,7 +490,7 @@ cd /opt/splunk/bin
               - Click on ``Add Credentials``
               - Kind: Secret text!! 
               - Secret: `Paste the SonarQube token` value that we have created on the SonarQube server
-              - ID: ``SonarQube-Token``
+              - ID: ``SonarQube-Token`` #Must match as on Jenkinsfile line 57
               - Description: `SonarQube-Token`
               - Click on Create
 
@@ -525,7 +542,7 @@ cd /opt/splunk/bin
           - Enable Treat username as secret
           - Password: ``ansibleadmin``
           - ID: ``Ansible-Credential``
-          - Description: `Ansible-Credential`
+          - Description: `Ansible-Credential`  #As on line 99
           - Click on `Create`   
       ![SonarQubeServerSetup!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/raw/zdocs/images/Screen%20Shot%202023-04-27%20at%202.10.40%20PM.png)
 
@@ -646,8 +663,8 @@ cd /opt/splunk/bin
     - Username: ``admin``
     - Password: `admin`
 
-    ### Go ahead and Create your Nexus Project Repositories
-    - CREATE 1st REPO (Release Repo): 
+    ### Go ahead and Create your Nexus Project Repositories (4)
+    - **CREATE 1st REPO (Release Repo)**: 
         - Click on the Gear Icon 
         - Click on `Repository` 
         - Click `Create Repository` 
@@ -656,7 +673,7 @@ cd /opt/splunk/bin
         - Version Policy: Select `Release`
         - Click `Create Repository`
 
-    - CREATE 2nd REPO (Snapshot Repo): 
+    - **CREATE 2nd REPO (Snapshot Repo)**: 
         - Click on `Create Repository` 
         - Select Recipe: `maven2(hosted)` 
         - Name: `maven-project-snapshots` 
@@ -670,6 +687,7 @@ cd /opt/splunk/bin
         - Version Policy: Select `Release`
         - Remote Storage: https://repo.maven.apache.org/maven2 
         - Click `Create Repository`
+        - **Maven2 Proxy** is the repo option that gives the option for the downloading the Java dependencies that the project requires from the Maven Central. The depencies are stored in this repo.
 
     - CREATE 4th REPO (Group Repo): 
         - Click on `Create Repository` 
@@ -677,8 +695,10 @@ cd /opt/splunk/bin
         - Name: `maven-project-group` 
         - Version Policy: Select `Mixed` 
         - Member Repositories: Assign All The Repos You Created to The Group 
-          - **MEANING:** *Move all 4 repositories to the Box on your Right*
+          - **MEANING:** *Move all 4 repositories to the Box on your Right* `maven-project-releases`, `maven-project-snapshots`, and  `maven-project-central` 
         - Click `Create Repository`
+        **Maven2 #Group** is the combination of all the repository that I am using maven to manage.
+
 
     ![NexusSetup!](https://github.com/awanmbandi/realworld-cicd-pipeline-project/raw/zdocs/images/Screen%20Shot%202023-04-27%20at%203.42.03%20PM.png) 
 
@@ -686,7 +706,7 @@ cd /opt/splunk/bin
 A) Update Maven `POM.xml` file
 - Update the Following lines of Code ``(Line 32 and 36)`` in the maven `POM` file and save
 ```bash
-<url>http://Nexus-Server-Private-IP:8081/repository/maven-project-snapshots/</url>
+<url>http://Nexus-Server-Private-IP:8081/repository/maven-project-snapshots/</url> 
 
 <url>http://Nexus-Server-Private-IP:8081/repository/maven-project-releases/</url>
 ```
